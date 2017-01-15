@@ -100,8 +100,9 @@ Given such high correlations, we can try to see whether there are some "principa
 <br>
 
 ```{r echo=TRUE, eval=TRUE, comment=NA, warning=FALSE,error=FALSE, message=FALSE, prompt=FALSE, tidy=TRUE}
-Variance_Explained_Table_results<-PCA(futures_data, graph=FALSE)
-Variance_Explained_Table<-cbind(paste("component",1:ncol(futures_data),sep=" "),Variance_Explained_Table_results$eig)
+crisis_data = futures_data[as.Date(rownames(futures_data)) > "2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
+Variance_Explained_Table_results<-PCA(crisis_data, graph=FALSE)
+Variance_Explained_Table<-cbind(paste("component",1:ncol(crisis_data),sep=" "),Variance_Explained_Table_results$eig)
 Variance_Explained_Table<-as.data.frame(Variance_Explained_Table)
 colnames(Variance_Explained_Table)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
 ```
@@ -165,13 +166,32 @@ print(m1,'chart')
 <br>
 
 **Your Answers here:**
-<br>
-<br>
-<br>
-<br>
+1) We need six components to get at least 50% of the variance.
 
+2) The principal component - component weight which has weight of 21.94% has the following highest weight:
+5 year T-Notes US with weight of 0.93
+10 year T-Notes with weight of 0.93
 
-<hr>
+3) The eigenvalue of the first 10 components is above 1, and minimum percentage of variance
+is 2.04% and their cumulative is above 50%. We can call these 10 components principal components.
+
+4a) We add:
+crisis_data = futures_data[as.Date(rownames(futures_data)) > "2002-11-01" & as.Date(rownames(futures_data)) < "2007-10-01", ]
+Variance_Explained_Table_results2<-PCA(crisis_data, graph=FALSE)
+Variance_Explained_Table2<-cbind(paste("component",1:ncol(crisis_data),sep=" "),Variance_Explained_Table_results2$eig)
+Variance_Explained_Table2<-as.data.frame(Variance_Explained_Table2)
+colnames(Variance_Explained_Table2)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+
+4b) We add:
+crisis_data = futures_data[as.Date(rownames(futures_data)) > "2007-10-01" & as.Date(rownames(futures_data)) < "2009-03-01", ]
+Variance_Explained_Table_results2<-PCA(crisis_data, graph=FALSE)
+Variance_Explained_Table2<-cbind(paste("component",1:ncol(crisis_data),sep=" "),Variance_Explained_Table_results2$eig)
+Variance_Explained_Table2<-as.data.frame(Variance_Explained_Table2)
+colnames(Variance_Explained_Table2)<-c("Component","Eigenvalue", "Percentage_of_explained_variance", "Cumulative_percentage_of_explained_variance")
+
+5) In the crisis, we have 13 principal components having eigenvalue greater than 1 (with weight of almost 75%).
+In pre crisis, we have 15 principal components (with weight of almost 70%.
+=> In crisis, few components have higher variance => explain more about the market.
 
 ### A Simple Futures Trend Following Strategy
 
@@ -249,13 +269,14 @@ How does this compare with **existing CTA products** such as [this one from Soci
 <br>
 
 **Your Answers here:**
-<br>
-<br>
-<br>
-<br>
+1) The code takes the moving averages of futures for windows with different lengths (MAfreq).
+Then, a matrix of signals is created. Weights are scaled back (normalized) to ensure
+same investment per day. Decision is taken based on whether signal shifts (with 
+2 days gap)
 
 
-<hr>
+2) If you use different moving average technical indicators, for example MAfreq, the
+sequence of windows taken change. Hence, the output will also change accordingly.
 
 ### A class competition
 
